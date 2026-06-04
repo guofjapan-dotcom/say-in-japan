@@ -1,6 +1,6 @@
 var CACHE = 'jpsp-v9-033';
 var ASSETS = [
-  '/',
+  '/say-in-japan/',
   'index.html',
   'css/style.css',
   'js/data/scenes.js',

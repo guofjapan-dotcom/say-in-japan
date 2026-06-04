@@ -2,7 +2,7 @@
   "name": "say-在日助手",
   "short_name": "say",
   "description": "离线场景式日本生活口语沟通工具",
-  "start_url": "/",
+  "start_url": "/say-in-japan/",
   "display": "standalone",
   "background_color": "#3366EE",
   "theme_color": "#3366EE",
