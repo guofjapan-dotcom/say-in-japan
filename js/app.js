@@ -48,19 +48,19 @@ function renderHome(){
   h+='<div class="alert-banner"><div class="marquee" id="alertMarquee"><span>🇯🇵 报警：110（警察）</span><span>🚑 急救·消防：119</span><span>🇨🇳 外交部领保热线：+86-10-12308</span><span>🇯🇵 报警：110（警察）</span><span>🚑 急救·消防：119</span><span>🇨🇳 外交部领保热线：+86-10-12308</span></div></div>';
   h+='<div class="intent-bar" id="intentBar">'+INTENTS.map(function(it){return'<button class="intent-pill" data-intent="'+it.intent+'"><span class="ie">'+it.emoji+'</span> '+CV.t(it.cn)+'</button>';}).join('')+'</div>';
   // search + realtime results
-  h+='<div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="searchInput" placeholder="搜索短句、场景关键词" autocomplete="off"><div class="search-results hidden" id="searchResults"></div></div>';
+  h+='<div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="searchInput" placeholder="'+esc(CV.t('搜索短句、场景关键词'))+'" autocomplete="off"><div class="search-results hidden" id="searchResults"></div></div>';
   // my quick
-  h+='<h3 class="section-head">⭐ 我的常用</h3>';
+  h+='<h3 class="section-head">'+CV.t('⭐ 我的常用')+'</h3>';
   if(quick.length){h+='<div class="home-grid">'+quick.map(function(p){return'<button class="scene-btn" onclick="JPSP.openDetail(\''+p.id+'\')"><span class="se">'+eForIcon(p.icon)+'</span><span class="label">'+CV.t(p.cn)+'</span></button>';}).join('')+'</div>';
     h+='<div class="quick-sort">'+quick.map(function(p,i){var b='';if(i>0)b+='<button class="qs-btn" onclick="JPSP.moveQuick('+i+',-1)">◀</button>';b+='<span class="qs-name">'+CV.t(p.cn)+'</span>';if(i<quick.length-1)b+='<button class="qs-btn" onclick="JPSP.moveQuick('+i+',1)">▶</button>';b+='<button class="qs-del" onclick="JPSP.removeQuick('+i+')">✕</button>';return'<div class="qs-chip">'+b+'</div>';}).join('')+'</div>';}
-  else{h+='<p class="empty-hint">在词条详情页点击「➕ 添加到常用」</p>';}
+  else{h+='<p class="empty-hint">'+CV.t('在词条详情页点击「➕ 添加到常用」')+'</p>';}
   // scenes
-  h+='<h3 class="section-head">📂 场景入口</h3>';
+  h+='<h3 class="section-head">'+CV.t('📂 场景入口')+'</h3>';
   h+='<div class="home-grid">';
-  SCENES.scenes.forEach(function(s){var cls='scene-btn';h+='<button class="'+cls+'" onclick="JPSP.openScene(\''+s.id+'\')"><span class="se">'+emojiForScene(s.id)+'</span><span class="label">'+s.title_cn+'</span><span class="count">'+s.count+' 句</span></button>';});
+  SCENES.scenes.forEach(function(s){var cls='scene-btn';h+='<button class="'+cls+'" onclick="JPSP.openScene(\''+s.id+'\')"><span class="se">'+emojiForScene(s.id)+'</span><span class="label">'+CV.t(s.title_cn)+'</span><span class="count">'+s.count+' '+CV.t('句')+'</span></button>';});
   h+='</div>';
   // recent
-  if(recent.length){h+='<div class="home-extras"><h3>🕐 最近使用</h3><div class="recent-list">'+recent.map(function(p){return'<div class="recent-item" onclick="JPSP.openDetail(\''+p.id+'\')">'+eForIcon(p.icon)+' '+CV.t(p.cn)+'</div>';}).join('')+'</div></div>';}
+  if(recent.length){h+='<div class="home-extras"><h3>'+CV.t('🕐 最近使用')+'</h3><div class="recent-list">'+recent.map(function(p){return'<div class="recent-item" onclick="JPSP.openDetail(\''+p.id+'\')">'+eForIcon(p.icon)+' '+CV.t(p.cn)+'</div>';}).join('')+'</div></div>';}
   h+='<div class="footer-copyright"><p>© 2026 Peak.Guo</p><p>Say in Japan · Free &amp; Open Source Project</p><p>Made in Japan</p><p><a href="https://github.com/guofjapan-dotcom/say-in-japan" target="_blank" style="color:#3366EE">GitHub Repository</a></p></div>';
   h+='<div class="settings-links">';
   h+='<a class="settings-link" href="javascript:JPSP.showDisclaimer()">免责声明</a>';
@@ -89,9 +89,9 @@ window.JPSP.moveQuick=function(i,d){var q=S.get('quick')||[];var j=i+d;if(j<0||j
 
 // ===== SCENES LIST =====
 function renderScenesList(){
-  var h='<div class="scroll-page"><div class="header"><h1>所有场景</h1></div>';
+  var h='<div class="scroll-page"><div class="header"><h1>'+CV.t('所有场景')+'</h1></div>';
   h+='<div class="scene-list">';
-  SCENES.scenes.forEach(function(s){var e=s.id==='emergency';h+='<div class="sl-row'+(e?' emergency-row':'')+'" onclick="JPSP.openScene(\''+s.id+'\')"><span class="sl-emoji">'+emojiForScene(s.id)+'</span><div class="sl-body"><div class="sl-cn">'+s.title_cn+'</div><div class="sl-jp">'+s.title_jp+'</div></div><span class="sl-count">'+s.count+' 句</span></div>';});
+  SCENES.scenes.forEach(function(s){var e=s.id==='emergency';h+='<div class="sl-row'+(e?' emergency-row':'')+'" onclick="JPSP.openScene(\''+s.id+'\')"><span class="sl-emoji">'+emojiForScene(s.id)+'</span><div class="sl-body"><div class="sl-cn">'+CV.t(s.title_cn)+'</div><div class="sl-jp">'+s.title_jp+'</div></div><span class="sl-count">'+s.count+' '+CV.t('句')+'</span></div>';});
   h+='</div></div>';
   document.getElementById('app-content').innerHTML=h;
 }
@@ -106,8 +106,8 @@ function renderScenePage(sceneId,ssId){
   if(ssId){items=items.filter(function(p){return p.subscene===ssId});}else if(subs.length){ssId=subs[0].id;items=items.filter(function(p){return p.subscene===ssId});}
   var isEm=sceneId==='emergency';
   var h='<div class="scroll-page">';
-  h+='<div class="nav-bar"><button class="back-btn" onclick="JPSP.goBack()">←</button><span class="section-title">'+emojiForScene(sceneId)+' '+((info||{}).title_cn||'')+'</span><span class="section-count">'+items.length+' 句</span></div>';
-  if(subs.length>1){h+='<div class="sub-tabs">'+subs.map(function(s){var a=s.id===ssId?' active':'';return'<button class="sub-tab'+a+(isEm?' emergency':'')+'" onclick="JPSP.openScene(\''+sceneId+'\',\''+s.id+'\')">'+s.name+'</button>';}).join('')+'</div>';}
+  h+='<div class="nav-bar"><button class="back-btn" onclick="JPSP.goBack()">←</button><span class="section-title">'+emojiForScene(sceneId)+' '+CV.t((info||{}).title_cn||'')+'</span><span class="section-count">'+items.length+' '+CV.t('句')+'</span></div>';
+  if(subs.length>1){h+='<div class="sub-tabs">'+subs.map(function(s){var a=s.id===ssId?' active':'';return'<button class="sub-tab'+a+(isEm?' emergency':'')+'" onclick="JPSP.openScene(\''+sceneId+'\',\''+s.id+'\')">'+CV.t(s.name)+'</button>';}).join('')+'</div>';}
   h+='<div class="phrase-list">'+items.map(function(p){return renderRow(p,isEm);}).join('')+'</div>';
   if(isEm)h+=renderEmbassy();
   h+='</div>';
@@ -118,7 +118,7 @@ function renderScenePage(sceneId,ssId){
 // ===== EMERGENCY =====
 function renderEmergencyPage(){
   var items=PHRASES.filter(function(p){return p.scene==='emergency'});
-  var h='<div class="scroll-page"><div class="header"><h1>🚨 应急</h1></div>';
+  var h='<div class="scroll-page"><div class="header"><h1>'+CV.t('🚨 应急')+'</h1></div>';
   h+='<div class="sub-tabs">';
   ['urgent','lost','health','help','embassy'].forEach(function(sub){var it=items.filter(function(p){return p.subscene===sub});if(it.length)h+='<button class="sub-tab" onclick="JPSP.openScene(\'emergency\',\''+sub+'\')">'+CV.t(it[0].cn)+'</button>';});
   h+='</div>';
@@ -141,8 +141,8 @@ function renderEmbassy(){
 function renderFavoritesPage(){
   var ids=S.get('favorites')||[];
   var items=PHRASES.filter(function(p){return ids.includes(p.id)});
-  var h='<div class="scroll-page"><div class="header"><h1>⭐ 我的收藏</h1><p>'+items.length+' 句</p></div>';
-  if(!items.length)h+='<div class="empty"><span class="empty-icon">⭐</span>还没有收藏的句子</div>';
+  var h='<div class="scroll-page"><div class="header"><h1>'+CV.t('⭐ 我的收藏')+'</h1><p>'+items.length+' '+CV.t('句')+'</p></div>';
+  if(!items.length)h+='<div class="empty"><span class="empty-icon">⭐</span>'+CV.t('还没有收藏的句子')+'</div>';
   else h+='<div class="phrase-list">'+items.map(function(p){return renderRow(p)}).join('')+'</div>';
   h+='</div>';
   document.getElementById('app-content').innerHTML=h;
@@ -151,7 +151,7 @@ function renderFavoritesPage(){
 // ===== PHRASE ROW =====
 function renderRow(p,isEm){
   var f=S.isInSet('favorites',p.id),pl=TTS.isPlaying(p.id);
-  return'<div class="phrase-row'+(isEm?' emergency-row':'')+(pl?' playing':'')+'" onclick="JPSP.openDetail(\''+p.id+'\')"><span class="pr-emoji">'+eForIcon(p.icon)+'</span><div class="body"><div class="cn">'+p.cn+'</div><div class="jp">'+p.jp+'</div>'+(p.tags?'<div class="tags">'+p.tags.slice(0,3).map(function(t){return'<span class="tag '+tagClass(t)+'">'+t+'</span>';}).join('')+'</div>':'')+'</div><div class="actions"><button class="play-btn'+(pl?' playing':'')+'" onclick="event.stopPropagation();JPSP.playAndRecord(\''+p.id+'\',\''+esc(p.jp)+'\')">▶</button><button class="fav-btn-sm'+(f?' on':'')+'" onclick="event.stopPropagation();JPSP.toggleFav(\''+p.id+'\')">'+(f?'⭐':'☆')+'</button></div></div>';
+  return'<div class="phrase-row'+(isEm?' emergency-row':'')+(pl?' playing':'')+'" onclick="JPSP.openDetail(\''+p.id+'\')"><span class="pr-emoji">'+eForIcon(p.icon)+'</span><div class="body"><div class="cn">'+CV.t(p.cn)+'</div><div class="jp">'+p.jp+'</div>'+(p.tags?'<div class="tags">'+p.tags.slice(0,3).map(function(t){return'<span class="tag '+tagClass(t)+'">'+CV.t(t)+'</span>';}).join('')+'</div>':'')+'</div><div class="actions"><button class="play-btn'+(pl?' playing':'')+'" onclick="event.stopPropagation();JPSP.playAndRecord(\''+p.id+'\',\''+esc(p.jp)+'\')">▶</button><button class="fav-btn-sm'+(f?' on':'')+'" onclick="event.stopPropagation();JPSP.toggleFav(\''+p.id+'\')">'+(f?'⭐':'☆')+'</button></div></div>';
 }
 
 // ===== DETAIL =====
@@ -165,17 +165,17 @@ function renderDetail(id){
   h+='<div class="detail-img">'+eForIcon(p.icon)+'</div>';
   h+='<div class="detail-cn">'+CV.t(p.cn)+'</div>';
   h+='<div class="detail-jp">'+p.jp+'</div>';
-  if(p.phonetic)h+='<div class="detail-phonetic"><span class="dp-icon">🔊</span>'+p.phonetic+'</div>';
-  if(p.tags)h+='<div class="detail-tags">'+p.tags.map(function(t){return'<span class="detail-tag '+tagClass(t)+'">#'+t+'</span>';}).join('')+'</div>';
-  h+='<div class="detail-actions"><button class="btn-play" onclick="JPSP.playAndRecord(\''+id+'\',\''+esc(p.jp)+'\')">🔊 '+(pl?'播放中…':'播放')+'</button><button class="btn-fav'+(f?' on':'')+'" onclick="JPSP.toggleFav(\''+id+'\')">'+(f?'⭐ 已收藏':'☆ 收藏')+'</button></div>';
-  h+='<button class="quick-add-btn'+(q?' added':'')+'" onclick="JPSP.addQuick(\''+id+'\')">'+(q?'✅ 已添加到常用':'➕ 添加到常用')+'</button>';
+  if(p.phonetic)h+='<div class="detail-phonetic"><span class="dp-icon">🔊</span>'+CV.t(p.phonetic)+'</div>';
+  if(p.tags)h+='<div class="detail-tags">'+p.tags.map(function(t){return'<span class="detail-tag '+tagClass(t)+'">#'+CV.t(t)+'</span>';}).join('')+'</div>';
+  h+='<div class="detail-actions"><button class="btn-play" onclick="JPSP.playAndRecord(\''+id+'\',\''+esc(p.jp)+'\')">🔊 '+(pl?CV.t('播放中…'):CV.t('播放'))+'</button><button class="btn-fav'+(f?' on':'')+'" onclick="JPSP.toggleFav(\''+id+'\')">'+(f?CV.t('⭐ 已收藏'):CV.t('☆ 收藏'))+'</button></div>';
+  h+='<button class="quick-add-btn'+(q?' added':'')+'" onclick="JPSP.addQuick(\''+id+'\')">'+(q?CV.t('✅ 已添加到常用'):CV.t('➕ 添加到常用'))+'</button>';
   h+=renderResponse(p);
   h+=renderFeedback(p);
   var items=PHRASES.filter(function(ph){return ph.scene===p.scene&&ph.subscene===p.subscene});if(!items.length)items=PHRASES.filter(function(ph){return ph.scene===p.scene});
   var idx=items.findIndex(function(ph){return ph.id===id});
   h+='<div class="nav-buttons">';
-  if(idx>0)h+='<button onclick="JPSP.openDetail(\''+items[idx-1].id+'\')">← 上一句</button>';
-  if(idx<items.length-1)h+='<button onclick="JPSP.openDetail(\''+items[idx+1].id+'\')">下一句 →</button>';
+  if(idx>0)h+='<button onclick="JPSP.openDetail(\''+items[idx-1].id+'\')">'+CV.t('← 上一句')+'</button>';
+  if(idx<items.length-1)h+='<button onclick="JPSP.openDetail(\''+items[idx+1].id+'\')">'+CV.t('下一句 →')+'</button>';
   h+='</div></div>';
   document.getElementById('app-content').innerHTML=h;document.getElementById('app-content').scrollTop=0;
 }
@@ -183,8 +183,8 @@ function renderDetail(id){
 // ===== RESPONSE =====
 function renderResponse(p){
   var r=[{emoji:'🚫',label:CV.t('被拒绝'),action:'rejected'},{emoji:'🤷',label:CV.t('听不懂'),action:'confused'}];
-  var s={rejected:(function(){var i=PHRASES.filter(function(ph){return ph.scene===p.scene&&ph.id!==p.id}).slice(0,1);return i.length?i[0].cn:'';})(),confused:'もう一度お願いします'};
-  return'<div class="response-section"><h3>❓ 对方说了什么？</h3><div class="response-grid">'+r.map(function(x){return'<div class="resp-card" onclick="JPSP.handleResponse(\''+x.action+'\',\''+esc(p.id)+'\')"><div class="resp-emoji">'+x.emoji+'</div><div class="resp-label">'+x.label+'</div>'+(s[x.action]?'<div class="resp-suggest">👉 '+s[x.action]+'</div>':'')+'</div>';}).join('')+'</div></div>';
+  var s={rejected:(function(){var i=PHRASES.filter(function(ph){return ph.scene===p.scene&&ph.id!==p.id}).slice(0,1);return i.length?CV.t(i[0].cn):'';})(),confused:'もう一度お願いします'};
+  return'<div class="response-section"><h3>'+CV.t('❓ 对方说了什么？')+'</h3><div class="response-grid">'+r.map(function(x){return'<div class="resp-card" onclick="JPSP.handleResponse(\''+x.action+'\',\''+esc(p.id)+'\')"><div class="resp-emoji">'+x.emoji+'</div><div class="resp-label">'+x.label+'</div>'+(s[x.action]?'<div class="resp-suggest">👉 '+s[x.action]+'</div>':'')+'</div>';}).join('')+'</div></div>';
 }
 window.JPSP.handleResponse=function(action,phraseId){
   var p=PHRASES.find(function(ph){return ph.id===phraseId});if(!p)return;S.pushRecent('history',phraseId);
@@ -200,7 +200,7 @@ function showModal(matches){
 
 // ===== FEEDBACK =====
 function renderFeedback(p){
-  return'<div class="feedback-row"><span>这个表达有帮助吗？</span><button onclick="JPSP.sendFeedback(\''+esc(p.id)+'\',\'helpful\')">👍 有用</button><button onclick="JPSP.sendFeedback(\''+esc(p.id)+'\',\'not_helpful\')">👎 不好用</button></div>';
+  return'<div class="feedback-row"><span>'+CV.t('这个表达有帮助吗？')+'</span><button onclick="JPSP.sendFeedback(\''+esc(p.id)+'\',\'helpful\')">'+CV.t('👍 有用')+'</button><button onclick="JPSP.sendFeedback(\''+esc(p.id)+'\',\'not_helpful\')">'+CV.t('👎 不好用')+'</button></div>';
 }
 window.JPSP.sendFeedback=function(id,t){var fb=S.get('feedback')||[];fb.push({phrase:id,type:t,time:Date.now()});S.set('feedback',fb);};
 
@@ -213,7 +213,7 @@ function doSearch(q){
   q=q.toLowerCase().trim();
   var m=PHRASES.filter(function(p){return p.cn.indexOf(q)>-1||p.jp.indexOf(q)>-1||(p.tags||[]).some(function(t){return t.indexOf(q)>-1})||(p.intent||'').indexOf(q)>-1;}).slice(0,8);
   if(!m.length){r.classList.add('hidden');return;}
-  r.innerHTML=m.map(function(p){return'<div class="sr-item" onclick="JPSP.openDetail(\''+p.id+'\')"><span class="sr-emoji">'+eForIcon(p.icon)+'</span><div><div class="sr-cn">'+p.cn+'</div><div class="sr-jp">'+p.jp+'</div></div></div>';}).join('');
+  r.innerHTML=m.map(function(p){return'<div class="sr-item" onclick="JPSP.openDetail(\''+p.id+'\')"><span class="sr-emoji">'+eForIcon(p.icon)+'</span><div><div class="sr-cn">'+CV.t(p.cn)+'</div><div class="sr-jp">'+p.jp+'</div></div></div>';}).join('');
   r.classList.remove('hidden');
 }
 document.addEventListener('click',function(e){var w=document.querySelector('.search-wrap');if(w&&!w.contains(e.target)){var r=document.getElementById('searchResults');if(r)r.classList.add('hidden');}});
@@ -240,7 +240,7 @@ window.JPSP.startApp=function(){navStack=[{type:'tab',tab:'home'}];renderTab('ho
 window.JPSP.showDisclaimer=function(){
   var ex=document.querySelector('.disclaimer-overlay');if(ex)ex.remove();
   var ov=document.createElement('div');ov.className='disclaimer-overlay';
-  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>免责声明</h2><p>本应用仅提供日常生活交流参考用语与辅助功能，<strong>不构成任何法律、医疗或官方机构的正式建议</strong>。</p><p>紧急情况请优先联系日本当地紧急电话：<span class="emergency-highlight">警察（110）</span> · <span class="emergency-highlight">救急·消防（119）</span></p><p>涉及领事保护等事宜，请以中国驻日本使领馆官方公布信息为准。使用本应用过程中产生的任何行为及后果，由使用者自行承担。</p><div class="lang-section"><h3>日本語</h3><p>本アプリは、日常生活におけるコミュニケーション補助を目的とした参考表現·音声再生ツールです。<strong>法律·医療·公的機関による正式な助言を行うものではありません。</strong></p><p>緊急時は、ためらわずに日本の緊急通報番号：<span class="emergency-highlight">警察（110）</span>·<span class="emergency-highlight">救急·消防（119）</span>へ連絡してください。</p><p>領事保護に関わる事項は、在日中国大使館·総領事館の公式情報をご確認ください。本アプリの利用により生じたいかなる結果についても、開発者は一切の責任を負いません。</p><p style="color:#aeaeb2;font-size:11px;margin-top:10px;text-align:center">Made by Peak.Guo</p></div><button class="disclaimer-accept" onclick="this.closest(\'.disclaimer-overlay\').remove()">閉じる</button></div>';
+  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>'+CV.t('免责声明')+'</h2><p>本应用仅提供日常生活交流参考用语与辅助功能，<strong>不构成任何法律、医疗或官方机构的正式建议</strong>。</p><p>紧急情况请优先联系日本当地紧急电话：<span class="emergency-highlight">警察（110）</span> · <span class="emergency-highlight">救急·消防（119）</span></p><p>涉及领事保护等事宜，请以中国驻日本使领馆官方公布信息为准。使用本应用过程中产生的任何行为及后果，由使用者自行承担。</p><div class="lang-section"><h3>日本語</h3><p>本アプリは、日常生活におけるコミュニケーション補助を目的とした参考表現·音声再生ツールです。<strong>法律·医療·公的機関による正式な助言を行うものではありません。</strong></p><p>緊急時は、ためらわずに日本の緊急通報番号：<span class="emergency-highlight">警察（110）</span>·<span class="emergency-highlight">救急·消防（119）</span>へ連絡してください。</p><p>領事保護に関わる事項は、在日中国大使館·総領事館の公式情報をご確認ください。本アプリの利用により生じたいかなる結果についても、開発者は一切の責任を負いません。</p><p style="color:#aeaeb2;font-size:11px;margin-top:10px;text-align:center">Made by Peak.Guo</p></div><button class="disclaimer-accept" onclick="this.closest(\'.disclaimer-overlay\').remove()">'+CV.t('閉じる')+'</button></div>';
   ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);
 };
 
