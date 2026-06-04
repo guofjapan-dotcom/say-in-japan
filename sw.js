@@ -1,4 +1,4 @@
-var CACHE = 'jpsp-v4-1';
+var CACHE = 'jpsp-v7-031';
 var ASSETS = [
   '/',
   'index.html',
@@ -20,6 +20,7 @@ self.addEventListener('install', function(e) {
       return cache.addAll(ASSETS);
     })
   );
+  self.skipWaiting();
 });
 
 self.addEventListener('fetch', function(e) {
@@ -38,6 +39,18 @@ self.addEventListener('activate', function(e) {
           return caches.delete(k);
         })
       );
+    }).then(function() {
+      return self.clients.matchAll().then(function(clients) {
+        clients.forEach(function(client) {
+          client.postMessage({ type: 'version', version: '0.31', cache: CACHE });
+        });
+      });
     })
   );
+});
+
+self.addEventListener('message', function(e) {
+  if (e.data === 'skipWaiting') {
+    self.skipWaiting();
+  }
 });

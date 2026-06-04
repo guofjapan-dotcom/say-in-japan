@@ -15,6 +15,7 @@
 <div id="app-shell">
   <div id="app-header"><h1 onclick="JPSP.goHome()">say-在日助手</h1></div>
   <div id="app-content"></div>
+  <div id="app-footer"><p>© 2026 Peak.Guo · Say in Japan · Free &amp; Open Source Project</p><p>For personal and educational use. Commercial use without permission is prohibited.</p></div>
   <nav id="tabbar">
     <button class="tab active" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>首页</button>
     <button class="tab" data-tab="scenes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>场景</button>
@@ -38,6 +39,19 @@ JPSP.init(JPSP_PHRASES, JPSP_SCENES, JPSP_EMERGENCY);
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(function(){});
+  navigator.serviceWorker.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'version') {
+      var toast = document.createElement('div');
+      toast.className = 'update-toast';
+      toast.textContent = '发现新版本 v' + e.data.version + ' — 点击刷新即可更新';
+      toast.onclick = function() {
+        navigator.serviceWorker.controller && navigator.serviceWorker.controller.postMessage('skipWaiting');
+        window.location.reload();
+      };
+      document.body.appendChild(toast);
+      setTimeout(function() { if (toast.parentNode) toast.remove(); }, 8000);
+    }
+  });
 }
 </script>
 </body>
