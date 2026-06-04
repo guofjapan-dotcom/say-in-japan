@@ -266,6 +266,13 @@ body{background:#f2f2f7;color:#000;height:100%;overflow:hidden;-webkit-font-smoo
 .emergency-highlight{color:#ff3b30;font-weight:700}
 
 /* ================================================================
+   LANG TOGGLE
+   ================================================================ */
+.lang-toggle{text-align:right;margin-bottom:4px}
+.lt-btn{background:none;border:none;font-size:12px;cursor:pointer;color:#8e8e93;padding:4px 2px;font-weight:500}
+.lt-btn .lt-active{color:#3366EE;font-weight:700}
+
+/* ================================================================
    APP FOOTER (copyright)
    ================================================================ */
 #app-footer{flex-shrink:0;text-align:center;padding:8px 16px 4px;font-size:10px;color:#aeaeb2;background:#fff;border-top:0.5px solid #f0f0f5;line-height:1.6}

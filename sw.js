@@ -1,4 +1,4 @@
-var CACHE = 'jpsp-v8-032';
+var CACHE = 'jpsp-v9-033';
 var ASSETS = [
   '/',
   'index.html',
@@ -10,7 +10,9 @@ var ASSETS = [
   'js/core/storage.js',
   'js/core/speak.js',
   'js/core/router.js',
+  'js/core/converter.js',
   'js/app.js',
+  'js/vendor/cn2t.js',
   'manifest.json'
 ];
 
@@ -42,7 +44,7 @@ self.addEventListener('activate', function(e) {
     }).then(function() {
       return self.clients.matchAll().then(function(clients) {
         clients.forEach(function(client) {
-          client.postMessage({ type: 'version', version: '0.32', cache: CACHE });
+          client.postMessage({ type: 'version', version: '0.33', cache: CACHE });
         });
       });
     })

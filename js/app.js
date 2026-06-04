@@ -1,6 +1,6 @@
 // app.js — Japan survival phrase V5
 (function(){
-var S = JPSP.storage, TTS = JPSP.speak, I = JPSP.icons;
+var S = JPSP.storage, TTS = JPSP.speak, I = JPSP.icons, CV = JPSP.converter;
 var PHRASES = [], SCENES = {}, EMERGENCY = [];
 var navStack = [{type:'tab',tab:'home'}];
 var currentDetailId = null;
@@ -44,14 +44,15 @@ function renderHome(){
   var recent=(S.get('history')||[]).slice(0,8).map(function(id){return PHRASES.find(function(p){return p.id===id})}).filter(Boolean);
 
   var h='<div class="scroll-page">';
+  h+='<div class="lang-toggle"><button class="lt-btn" onclick="event.stopPropagation();JPSP.toggleLang()">' + (CV.getLang() === 'cn' ? '<span class="lt-active">简体</span> ｜ 繁體' : '简体 ｜ <span class="lt-active">繁體</span>') + '</button></div>';
   h+='<div class="alert-banner"><div class="marquee" id="alertMarquee"><span>🇯🇵 报警：110（警察）</span><span>🚑 急救·消防：119</span><span>🇨🇳 外交部领保热线：+86-10-12308</span><span>🇯🇵 报警：110（警察）</span><span>🚑 急救·消防：119</span><span>🇨🇳 外交部领保热线：+86-10-12308</span></div></div>';
-  h+='<div class="intent-bar" id="intentBar">'+INTENTS.map(function(it){return'<button class="intent-pill" data-intent="'+it.intent+'"><span class="ie">'+it.emoji+'</span> '+it.cn+'</button>';}).join('')+'</div>';
+  h+='<div class="intent-bar" id="intentBar">'+INTENTS.map(function(it){return'<button class="intent-pill" data-intent="'+it.intent+'"><span class="ie">'+it.emoji+'</span> '+CV.t(it.cn)+'</button>';}).join('')+'</div>';
   // search + realtime results
   h+='<div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="searchInput" placeholder="搜索短句、场景关键词" autocomplete="off"><div class="search-results hidden" id="searchResults"></div></div>';
   // my quick
   h+='<h3 class="section-head">⭐ 我的常用</h3>';
-  if(quick.length){h+='<div class="home-grid">'+quick.map(function(p){return'<button class="scene-btn" onclick="JPSP.openDetail(\''+p.id+'\')"><span class="se">'+eForIcon(p.icon)+'</span><span class="label">'+p.cn+'</span></button>';}).join('')+'</div>';
-    h+='<div class="quick-sort">'+quick.map(function(p,i){var b='';if(i>0)b+='<button class="qs-btn" onclick="JPSP.moveQuick('+i+',-1)">◀</button>';b+='<span class="qs-name">'+p.cn+'</span>';if(i<quick.length-1)b+='<button class="qs-btn" onclick="JPSP.moveQuick('+i+',1)">▶</button>';b+='<button class="qs-del" onclick="JPSP.removeQuick('+i+')">✕</button>';return'<div class="qs-chip">'+b+'</div>';}).join('')+'</div>';}
+  if(quick.length){h+='<div class="home-grid">'+quick.map(function(p){return'<button class="scene-btn" onclick="JPSP.openDetail(\''+p.id+'\')"><span class="se">'+eForIcon(p.icon)+'</span><span class="label">'+CV.t(p.cn)+'</span></button>';}).join('')+'</div>';
+    h+='<div class="quick-sort">'+quick.map(function(p,i){var b='';if(i>0)b+='<button class="qs-btn" onclick="JPSP.moveQuick('+i+',-1)">◀</button>';b+='<span class="qs-name">'+CV.t(p.cn)+'</span>';if(i<quick.length-1)b+='<button class="qs-btn" onclick="JPSP.moveQuick('+i+',1)">▶</button>';b+='<button class="qs-del" onclick="JPSP.removeQuick('+i+')">✕</button>';return'<div class="qs-chip">'+b+'</div>';}).join('')+'</div>';}
   else{h+='<p class="empty-hint">在词条详情页点击「➕ 添加到常用」</p>';}
   // scenes
   h+='<h3 class="section-head">📂 场景入口</h3>';
@@ -59,7 +60,7 @@ function renderHome(){
   SCENES.scenes.forEach(function(s){var cls='scene-btn';h+='<button class="'+cls+'" onclick="JPSP.openScene(\''+s.id+'\')"><span class="se">'+emojiForScene(s.id)+'</span><span class="label">'+s.title_cn+'</span><span class="count">'+s.count+' 句</span></button>';});
   h+='</div>';
   // recent
-  if(recent.length){h+='<div class="home-extras"><h3>🕐 最近使用</h3><div class="recent-list">'+recent.map(function(p){return'<div class="recent-item" onclick="JPSP.openDetail(\''+p.id+'\')">'+eForIcon(p.icon)+' '+p.cn+'</div>';}).join('')+'</div></div>';}
+  if(recent.length){h+='<div class="home-extras"><h3>🕐 最近使用</h3><div class="recent-list">'+recent.map(function(p){return'<div class="recent-item" onclick="JPSP.openDetail(\''+p.id+'\')">'+eForIcon(p.icon)+' '+CV.t(p.cn)+'</div>';}).join('')+'</div></div>';}
   h+='<div class="footer-copyright"><p>© 2026 Peak.Guo</p><p>Say in Japan · Free &amp; Open Source Project</p><p>Made in Japan</p><p><a href="https://github.com/guofjapan-dotcom/say-in-japan" target="_blank" style="color:#3366EE">GitHub Repository</a></p></div>';
   h+='<div class="settings-links">';
   h+='<a class="settings-link" href="javascript:JPSP.showDisclaimer()">免责声明</a>';
@@ -119,7 +120,7 @@ function renderEmergencyPage(){
   var items=PHRASES.filter(function(p){return p.scene==='emergency'});
   var h='<div class="scroll-page"><div class="header"><h1>🚨 应急</h1></div>';
   h+='<div class="sub-tabs">';
-  ['urgent','lost','health','help','embassy'].forEach(function(sub){var it=items.filter(function(p){return p.subscene===sub});if(it.length)h+='<button class="sub-tab" onclick="JPSP.openScene(\'emergency\',\''+sub+'\')">'+it[0].cn+'</button>';});
+  ['urgent','lost','health','help','embassy'].forEach(function(sub){var it=items.filter(function(p){return p.subscene===sub});if(it.length)h+='<button class="sub-tab" onclick="JPSP.openScene(\'emergency\',\''+sub+'\')">'+CV.t(it[0].cn)+'</button>';});
   h+='</div>';
   h+='<div class="phrase-list">'+items.filter(function(p){return p.subscene==='urgent'}).map(function(p){return renderRow(p,true)}).join('')+'</div>';
   h+=renderEmbassy();
@@ -162,7 +163,7 @@ function renderDetail(id){
   var h='<div class="scroll-page">';
   h+='<div class="nav-bar"><button class="back-btn" onclick="JPSP.goBack()">←</button><span class="section-title">详情</span></div>';
   h+='<div class="detail-img">'+eForIcon(p.icon)+'</div>';
-  h+='<div class="detail-cn">'+p.cn+'</div>';
+  h+='<div class="detail-cn">'+CV.t(p.cn)+'</div>';
   h+='<div class="detail-jp">'+p.jp+'</div>';
   if(p.phonetic)h+='<div class="detail-phonetic"><span class="dp-icon">🔊</span>'+p.phonetic+'</div>';
   if(p.tags)h+='<div class="detail-tags">'+p.tags.map(function(t){return'<span class="detail-tag '+tagClass(t)+'">#'+t+'</span>';}).join('')+'</div>';
@@ -181,7 +182,7 @@ function renderDetail(id){
 
 // ===== RESPONSE =====
 function renderResponse(p){
-  var r=[{emoji:'🚫',label:'被拒绝',action:'rejected'},{emoji:'🤷',label:'听不懂',action:'confused'}];
+  var r=[{emoji:'🚫',label:CV.t('被拒绝'),action:'rejected'},{emoji:'🤷',label:CV.t('听不懂'),action:'confused'}];
   var s={rejected:(function(){var i=PHRASES.filter(function(ph){return ph.scene===p.scene&&ph.id!==p.id}).slice(0,1);return i.length?i[0].cn:'';})(),confused:'もう一度お願いします'};
   return'<div class="response-section"><h3>❓ 对方说了什么？</h3><div class="response-grid">'+r.map(function(x){return'<div class="resp-card" onclick="JPSP.handleResponse(\''+x.action+'\',\''+esc(p.id)+'\')"><div class="resp-emoji">'+x.emoji+'</div><div class="resp-label">'+x.label+'</div>'+(s[x.action]?'<div class="resp-suggest">👉 '+s[x.action]+'</div>':'')+'</div>';}).join('')+'</div></div>';
 }
@@ -193,7 +194,7 @@ window.JPSP.handleResponse=function(action,phraseId){
 };
 function showModal(matches){
   var ov=document.createElement('div');ov.className='disclaimer-overlay';
-  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>💡 推荐下一句</h2><div class="modal-list">'+matches.map(function(m){return'<div class="modal-item" onclick="JPSP.openDetail(\''+m.id+'\');this.closest(\'.disclaimer-overlay\').remove()"><span class="mi-emoji">'+eForIcon(m.icon)+'</span><div><div class="modal-cn">'+m.cn+'</div><div class="modal-jp">'+m.jp+'</div></div></div>';}).join('')+'</div><button class="disclaimer-accept" onclick="this.closest(\'.disclaimer-overlay\').remove()">关闭</button></div>';
+  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>💡 推荐下一句</h2><div class="modal-list">'+matches.map(function(m){return'<div class="modal-item" onclick="JPSP.openDetail(\''+m.id+'\');this.closest(\'.disclaimer-overlay\').remove()"><span class="mi-emoji">'+eForIcon(m.icon)+'</span><div><div class="modal-cn">'+m.cn+'</div><div class="modal-jp">'+m.jp+'</div></div></div>';}).join('')+'</div><button class="disclaimer-accept" onclick="this.closest(\'.disclaimer-overlay\').remove()">'+CV.t('关闭')+'</button></div>';
   ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);
 }
 
@@ -218,7 +219,7 @@ function doSearch(q){
 document.addEventListener('click',function(e){var w=document.querySelector('.search-wrap');if(w&&!w.contains(e.target)){var r=document.getElementById('searchResults');if(r)r.classList.add('hidden');}});
 
 // ===== INTENT =====
-window.JPSP.triggerIntent=function(intent){var m=phrasesByIntent(intent);if(!m.length)return;if(m.length===1)JPSP.openDetail(m[0].id);else{var it=INTENTS.find(function(i){return i.intent===intent})||{emoji:'📄',cn:intent};var ov=document.createElement('div');ov.className='disclaimer-overlay';ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>'+it.emoji+' '+it.cn+' ('+m.length+' 句)</h2><div class="modal-list">'+m.map(function(p){return'<div class="modal-item" onclick="JPSP.openDetail(\''+p.id+'\');this.closest(\'.disclaimer-overlay\').remove()"><span class="mi-emoji">'+eForIcon(p.icon)+'</span><div><div class="modal-cn">'+p.cn+'</div><div class="modal-jp">'+p.jp+'</div></div></div>';}).join('')+'</div><button class="disclaimer-accept" onclick="this.closest(\'.disclaimer-overlay\').remove()">关闭</button></div>';ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);}};
+window.JPSP.triggerIntent=function(intent){var m=phrasesByIntent(intent);if(!m.length)return;if(m.length===1)JPSP.openDetail(m[0].id);else{var it=INTENTS.find(function(i){return i.intent===intent})||{emoji:'📄',cn:intent};var ov=document.createElement('div');ov.className='disclaimer-overlay';ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>'+it.emoji+' '+it.cn+' ('+m.length+' 句)</h2><div class="modal-list">'+m.map(function(p){return'<div class="modal-item" onclick="JPSP.openDetail(\''+p.id+'\');this.closest(\'.disclaimer-overlay\').remove()"><span class="mi-emoji">'+eForIcon(p.icon)+'</span><div><div class="modal-cn">'+p.cn+'</div><div class="modal-jp">'+p.jp+'</div></div></div>';}).join('')+'</div><button class="disclaimer-accept" onclick="this.closest(\'.disclaimer-overlay\').remove()">'+CV.t('关闭')+'</button></div>';ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);}};
 
 // ===== PLAY / FAV =====
 window.JPSP.playAndRecord=function(id,jp){S.pushRecent('history',id);TTS.speak(id,jp);};
@@ -250,25 +251,25 @@ window.JPSP.showDisclaimer=function(){
 	// ===== ABOUT =====
 	window.JPSP.showAbout=function(){
 	  var ov=document.createElement('div');ov.className='disclaimer-overlay';
-	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>👤 关于作者</h2><div class="static-card" style="background:#f8f8fa;padding:16px;border-radius:14px;margin-bottom:12px"><p><strong>作者：Peak.Guo</strong></p><p>Say in Japan 是作者在日本生活期间开发的免费沟通工具。</p><p>因为亲身经历过：</p><p>• 不会日语</p><p>• 不敢开口</p><p>• 找不到想表达的话</p><p>• 紧急情况不知道如何求助</p><p>所以开发了这个工具。</p><p>希望帮助更多来日本旅游、留学、工作和生活的人。</p></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">关闭</button></div>';
+	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>👤 关于作者</h2><div class="static-card" style="background:#f8f8fa;padding:16px;border-radius:14px;margin-bottom:12px"><p><strong>作者：Peak.Guo</strong></p><p>Say in Japan 是作者在日本生活期间开发的免费沟通工具。</p><p>因为亲身经历过：</p><p>• 不会日语</p><p>• 不敢开口</p><p>• 找不到想表达的话</p><p>• 紧急情况不知道如何求助</p><p>所以开发了这个工具。</p><p>希望帮助更多来日本旅游、留学、工作和生活的人。</p></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">'+CV.t('关闭')+'</button></div>';
 	  ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);
 	};
 	// ===== SUPPORT =====
 	window.JPSP.showSupport=function(){
 	  var ov=document.createElement('div');ov.className='disclaimer-overlay';
-	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>☕ 支持作者</h2><p style="text-align:center;margin-bottom:8px">如果这个工具帮助到了你，<br>欢迎请作者喝一杯咖啡。</p><p style="text-align:center;font-size:12px;color:#8e8e93;margin-bottom:12px">你的支持将用于：项目维护 · 词库更新 · BUG修复 · 用户体验优化</p><p style="text-align:center;font-size:13px;margin-bottom:14px">Say in Japan 将继续保持<strong>免费开放</strong>。</p><div class="qr-cards"><div class="qr-card" onclick="this.classList.toggle(\x27zoomed\x27)"><img src="assets/qr/wechat.png" alt="微信收款码" style="width:100%;border-radius:12px"><div class="qr-card-label">💚 微信支付</div></div><div class="qr-card" onclick="this.classList.toggle(\x27zoomed\x27)"><img src="assets/qr/alipay.png" alt="支付宝收款码" style="width:100%;border-radius:12px"><div class="qr-card-label">💙 支付宝</div></div></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">关闭</button></div>';
+	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>☕ 支持作者</h2><p style="text-align:center;margin-bottom:8px">如果这个工具帮助到了你，<br>欢迎请作者喝一杯咖啡。</p><p style="text-align:center;font-size:12px;color:#8e8e93;margin-bottom:12px">你的支持将用于：项目维护 · 词库更新 · BUG修复 · 用户体验优化</p><p style="text-align:center;font-size:13px;margin-bottom:14px">Say in Japan 将继续保持<strong>免费开放</strong>。</p><div class="qr-cards"><div class="qr-card" onclick="this.classList.toggle(\x27zoomed\x27)"><img src="assets/qr/wechat.png" alt="微信收款码" style="width:100%;border-radius:12px"><div class="qr-card-label">💚 微信支付</div></div><div class="qr-card" onclick="this.classList.toggle(\x27zoomed\x27)"><img src="assets/qr/alipay.png" alt="支付宝收款码" style="width:100%;border-radius:12px"><div class="qr-card-label">💙 支付宝</div></div></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">'+CV.t('关闭')+'</button></div>';
 	  ov.addEventListener('click',function(e){if(e.target===ov)ov.remove()});document.body.appendChild(ov);
 	};
 	// ===== SETTINGS =====
 	window.JPSP.showSettings=function(){
 	  var ov=document.createElement('div');ov.className='disclaimer-overlay';
-	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>⚙️ 项目信息</h2><div class="meta-row"><span class="label">版本</span><span class="value">0.32</span></div><div class="meta-row"><span class="label">最近更新</span><span class="value">2026-06-05</span></div><div class="meta-row"><span class="label">PWA</span><span class="value">✓ 支持</span></div><div class="meta-row"><span class="label">离线可用</span><span class="value">✓ 支持</span></div><div class="meta-row"><span class="label">开源协议</span><span class="value">CC BY-NC 4.0</span></div><div class="meta-row"><span class="label">作者</span><span class="value">Peak.Guo</span></div><div class="meta-row"><span class="label">GitHub</span><span class="value"><a href="https://github.com/guofjapan-dotcom/say-in-japan" target="_blank" style="color:#3366EE">查看仓库</a></span></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">关闭</button></div>';
+	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>⚙️ 项目信息</h2><div class="meta-row"><span class="label">版本</span><span class="value">0.32</span></div><div class="meta-row"><span class="label">最近更新</span><span class="value">2026-06-05</span></div><div class="meta-row"><span class="label">PWA</span><span class="value">✓ 支持</span></div><div class="meta-row"><span class="label">离线可用</span><span class="value">✓ 支持</span></div><div class="meta-row"><span class="label">开源协议</span><span class="value">CC BY-NC 4.0</span></div><div class="meta-row"><span class="label">作者</span><span class="value">Peak.Guo</span></div><div class="meta-row"><span class="label">GitHub</span><span class="value"><a href="https://github.com/guofjapan-dotcom/say-in-japan" target="_blank" style="color:#3366EE">查看仓库</a></span></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">'+CV.t('关闭')+'</button></div>';
 	  ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);
 	};
 	// ===== LICENSE =====
 	window.JPSP.showLicense=function(){
 	  var ov=document.createElement('div');ov.className='disclaimer-overlay';
-	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>📄 开源协议</h2><p>本项目为个人开源项目，采用 <strong>CC BY-NC 4.0</strong> 协议。</p><p style="color:#34c759;font-weight:600">允许：</p><p>• 学习</p><p>• 使用</p><p>• 分享</p><p>• Fork</p><p style="color:#ff3b30;font-weight:600">未经作者许可禁止商业用途。</p><p style="font-size:12px;color:#8e8e93;margin-top:8px">完整协议请查看项目仓库中的 LICENSE 文件。</p><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">关闭</button></div>';
+	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>📄 开源协议</h2><p>本项目为个人开源项目，采用 <strong>CC BY-NC 4.0</strong> 协议。</p><p style="color:#34c759;font-weight:600">允许：</p><p>• 学习</p><p>• 使用</p><p>• 分享</p><p>• Fork</p><p style="color:#ff3b30;font-weight:600">未经作者许可禁止商业用途。</p><p style="font-size:12px;color:#8e8e93;margin-top:8px">完整协议请查看项目仓库中的 LICENSE 文件。</p><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">'+CV.t('关闭')+'</button></div>';
 	  ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);
 	};
 	// ===== TAB BAR =====
