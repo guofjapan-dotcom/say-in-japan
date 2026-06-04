@@ -1,0 +1,15 @@
+{
+  "name": "say-在日助手",
+  "short_name": "say",
+  "description": "离线场景式日本生活口语沟通工具",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#3366EE",
+  "theme_color": "#3366EE",
+  "orientation": "portrait-primary",
+  "lang": "zh-CN",
+  "icons": [
+    {"src":"assets/icons/icon-192.png","sizes":"192x192","type":"image/png"},
+    {"src":"assets/icons/icon-512.png","sizes":"512x512","type":"image/png"}
+  ]
+}
