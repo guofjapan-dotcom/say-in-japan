@@ -1,4 +1,4 @@
-var CACHE = 'jpsp-v9-033';
+var CACHE = 'jpsp-v10-033';
 var ASSETS = [
   '/say-in-japan/',
   'index.html',
