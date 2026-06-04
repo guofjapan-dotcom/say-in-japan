@@ -255,6 +255,10 @@ body{background:#f2f2f7;color:#000;height:100%;overflow:hidden;-webkit-font-smoo
 .disclaimer-dialog .lang-section{margin-top:12px;padding-top:12px;border-top:1px solid #f0f0f5}
 .disclaimer-dialog .lang-section h3{font-size:13px;color:#8e8e93;margin-bottom:4px}
 .disclaimer-dialog .lang-section p{font-size:12px;color:#666;line-height:1.7}
+.meta-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:14px;border-bottom:1px solid #f0f0f5}
+.meta-row:last-child{border-bottom:none}
+.meta-row .label{color:#8e8e93}
+.meta-row .value{color:#000;font-weight:600}
 .disclaimer-accept{width:100%;background:#3366EE;color:#fff;border:none;border-radius:14px;padding:14px;font-size:16px;font-weight:700;margin-top:14px;cursor:pointer;min-height:48px;transition:opacity .2s}
 .disclaimer-accept:disabled{opacity:.35;cursor:not-allowed}
 .disclaimer-check{display:flex;align-items:center;gap:8px;margin:12px 0;cursor:pointer;font-size:14px;color:#3c3c43;min-height:42px}
@@ -268,24 +272,20 @@ body{background:#f2f2f7;color:#000;height:100%;overflow:hidden;-webkit-font-smoo
 #app-footer p{margin:0}
 
 /* ================================================================
-   STATIC PAGES (About / Support / Settings)
+   FOOTER (copyright)
    ================================================================ */
-.static-page{display:flex;flex-direction:column;gap:14px}
-.static-card{background:#fff;border-radius:16px;padding:18px 16px}
-.static-card h2{font-size:17px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.static-card p{font-size:14px;color:#3c3c43;line-height:1.7;margin-bottom:6px}
-.static-card .meta{font-size:12px;color:#8e8e93;margin-top:4px}
-.static-card .meta-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px;border-bottom:1px solid #f0f0f5}
-.static-card .meta-row:last-child{border-bottom:none}
-.static-card .meta-row .label{color:#8e8e93}
-.static-card .meta-row .value{color:#000;font-weight:600}
-.static-card .highlight{color:#3366EE;font-weight:700}
-.static-link{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#fff;border-radius:16px;cursor:pointer;text-decoration:none;color:#000;font-size:15px;font-weight:600;transition:background .1s}
-.static-link:active{background:#f6f6f9}
-.static-link .link-label{display:flex;align-items:center;gap:8px}
-.static-link .link-arrow{color:#aeaeb2;font-size:16px}
-.qr-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px;background:#f8f8fa;border-radius:14px;border:2px dashed #dcdce0;margin-top:8px}
-.qr-placeholder .qr-label{font-size:12px;color:#aeaeb2}
+.footer-copyright{text-align:center;font-size:10px;color:#aeaeb2;padding:16px 0 8px;line-height:1.7}
+.footer-copyright p{margin:0}
+
+/* ================================================================
+   QR CARDS
+   ================================================================ */
+.qr-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.qr-card{background:#fff;border-radius:16px;padding:12px;text-align:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .2s}
+.qr-card:active{transform:scale(.96)}
+.qr-card.zoomed{transform:scale(1.35);z-index:10;box-shadow:0 12px 40px rgba(0,0,0,.18)}
+.qr-card img{display:block;max-width:100%;height:auto}
+.qr-card-label{font-size:13px;font-weight:700;margin-top:8px;color:#000}
 
 /* ================================================================
    PWA UPDATE TOAST

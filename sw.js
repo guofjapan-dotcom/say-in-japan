@@ -1,4 +1,4 @@
-var CACHE = 'jpsp-v7-031';
+var CACHE = 'jpsp-v8-032';
 var ASSETS = [
   '/',
   'index.html',
@@ -42,7 +42,7 @@ self.addEventListener('activate', function(e) {
     }).then(function() {
       return self.clients.matchAll().then(function(clients) {
         clients.forEach(function(client) {
-          client.postMessage({ type: 'version', version: '0.31', cache: CACHE });
+          client.postMessage({ type: 'version', version: '0.32', cache: CACHE });
         });
       });
     })

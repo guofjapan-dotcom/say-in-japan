@@ -60,7 +60,7 @@ function renderHome(){
   h+='</div>';
   // recent
   if(recent.length){h+='<div class="home-extras"><h3>🕐 最近使用</h3><div class="recent-list">'+recent.map(function(p){return'<div class="recent-item" onclick="JPSP.openDetail(\''+p.id+'\')">'+eForIcon(p.icon)+' '+p.cn+'</div>';}).join('')+'</div></div>';}
-  h+='<div class="disclaimer-footer">※ 语言辅助工具，不构成官方建议</div>';
+  h+='<div class="footer-copyright"><p>© 2026 Peak.Guo</p><p>Say in Japan · Free &amp; Open Source Project</p><p>Made in Japan</p><p><a href="https://github.com/guofjapan-dotcom/say-in-japan" target="_blank" style="color:#3366EE">GitHub Repository</a></p></div>';
   h+='<div class="settings-links">';
   h+='<a class="settings-link" href="javascript:JPSP.showDisclaimer()">免责声明</a>';
   h+='<a class="settings-link" href="javascript:JPSP.showAbout()">关于作者</a>';
@@ -246,27 +246,31 @@ window.JPSP.showDisclaimer=function(){
 // ===== GO HOME =====
 	window.JPSP.goHome=function(){JPSP.speak.stop();navStack=[{type:'tab',tab:'home'}];renderTab('home');};
 
+
 	// ===== ABOUT =====
 	window.JPSP.showAbout=function(){
 	  var ov=document.createElement('div');ov.className='disclaimer-overlay';
-	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>👤 关于作者</h2><div class="static-card" style="background:#f8f8fa;padding:16px;border-radius:14px;margin-bottom:12px"><p><strong>Peak.Guo</strong></p><p>在日本生活期间开发。</p><p>因为亲身经历过：</p><p>• 不会日语</p><p>• 不敢开口</p><p>• 不知道怎么表达</p><p>所以制作了这个免费工具。</p><p>希望帮助更多来到日本的人。</p></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">关闭</button></div>';
+	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>👤 关于作者</h2><div class="static-card" style="background:#f8f8fa;padding:16px;border-radius:14px;margin-bottom:12px"><p><strong>作者：Peak.Guo</strong></p><p>Say in Japan 是作者在日本生活期间开发的免费沟通工具。</p><p>因为亲身经历过：</p><p>• 不会日语</p><p>• 不敢开口</p><p>• 找不到想表达的话</p><p>• 紧急情况不知道如何求助</p><p>所以开发了这个工具。</p><p>希望帮助更多来日本旅游、留学、工作和生活的人。</p></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">关闭</button></div>';
 	  ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);
 	};
-
 	// ===== SUPPORT =====
 	window.JPSP.showSupport=function(){
 	  var ov=document.createElement('div');ov.className='disclaimer-overlay';
-	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>☕ 支持作者</h2><p style="text-align:center;margin-bottom:12px">如果这个工具帮助到了你，<br>欢迎请作者喝杯咖啡。</p><div class="qr-placeholder"><span style="font-size:32px">📱</span><div class="qr-label">微信收款码</div></div><div class="qr-placeholder"><span style="font-size:32px">📱</span><div class="qr-label">支付宝收款码</div></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">关闭</button></div>';
-	  ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);
+	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>☕ 支持作者</h2><p style="text-align:center;margin-bottom:8px">如果这个工具帮助到了你，<br>欢迎请作者喝一杯咖啡。</p><p style="text-align:center;font-size:12px;color:#8e8e93;margin-bottom:12px">你的支持将用于：项目维护 · 词库更新 · BUG修复 · 用户体验优化</p><p style="text-align:center;font-size:13px;margin-bottom:14px">Say in Japan 将继续保持<strong>免费开放</strong>。</p><div class="qr-cards"><div class="qr-card" onclick="this.classList.toggle(\x27zoomed\x27)"><img src="assets/qr/wechat.png" alt="微信收款码" style="width:100%;border-radius:12px"><div class="qr-card-label">💚 微信支付</div></div><div class="qr-card" onclick="this.classList.toggle(\x27zoomed\x27)"><img src="assets/qr/alipay.png" alt="支付宝收款码" style="width:100%;border-radius:12px"><div class="qr-card-label">💙 支付宝</div></div></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">关闭</button></div>';
+	  ov.addEventListener('click',function(e){if(e.target===ov)ov.remove()});document.body.appendChild(ov);
 	};
-
 	// ===== SETTINGS =====
 	window.JPSP.showSettings=function(){
 	  var ov=document.createElement('div');ov.className='disclaimer-overlay';
-	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>⚙️ 设置 / 关于</h2><div class="meta-row"><span class="label">版本</span><span class="value">0.31</span></div><div class="meta-row"><span class="label">发布日期</span><span class="value">2026-06-05</span></div><div class="meta-row"><span class="label">许可证</span><span class="value">CC BY-NC 4.0</span></div><div class="meta-row"><span class="label">作者</span><span class="value">Peak.Guo</span></div><div class="meta-row"><span class="label">GitHub</span><span class="value"><a href="https://github.com/guofjapan-dotcom/say-in-japan" target="_blank" style="color:#3366EE">查看仓库</a></span></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">关闭</button></div>';
+	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>⚙️ 项目信息</h2><div class="meta-row"><span class="label">版本</span><span class="value">0.32</span></div><div class="meta-row"><span class="label">最近更新</span><span class="value">2026-06-05</span></div><div class="meta-row"><span class="label">PWA</span><span class="value">✓ 支持</span></div><div class="meta-row"><span class="label">离线可用</span><span class="value">✓ 支持</span></div><div class="meta-row"><span class="label">开源协议</span><span class="value">CC BY-NC 4.0</span></div><div class="meta-row"><span class="label">作者</span><span class="value">Peak.Guo</span></div><div class="meta-row"><span class="label">GitHub</span><span class="value"><a href="https://github.com/guofjapan-dotcom/say-in-japan" target="_blank" style="color:#3366EE">查看仓库</a></span></div><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">关闭</button></div>';
 	  ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);
 	};
-
+	// ===== LICENSE =====
+	window.JPSP.showLicense=function(){
+	  var ov=document.createElement('div');ov.className='disclaimer-overlay';
+	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>📄 开源协议</h2><p>本项目为个人开源项目，采用 <strong>CC BY-NC 4.0</strong> 协议。</p><p style="color:#34c759;font-weight:600">允许：</p><p>• 学习</p><p>• 使用</p><p>• 分享</p><p>• Fork</p><p style="color:#ff3b30;font-weight:600">未经作者许可禁止商业用途。</p><p style="font-size:12px;color:#8e8e93;margin-top:8px">完整协议请查看项目仓库中的 LICENSE 文件。</p><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">关闭</button></div>';
+	  ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);
+	};
 	// ===== TAB BAR =====
 document.getElementById('tabbar').onclick=function(e){var t=e.target.closest('.tab');if(!t)return;navStack=[{type:'tab',tab:t.dataset.tab}];renderTab(t.dataset.tab);};
 
