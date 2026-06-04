@@ -272,6 +272,18 @@ window.JPSP.showDisclaimer=function(){
 	  ov.innerHTML='<div class="disclaimer-dialog" onclick="event.stopPropagation()"><h2>📄 开源协议</h2><p>本项目为个人开源项目，采用 <strong>CC BY-NC 4.0</strong> 协议。</p><p style="color:#34c759;font-weight:600">允许：</p><p>• 学习</p><p>• 使用</p><p>• 分享</p><p>• Fork</p><p style="color:#ff3b30;font-weight:600">未经作者许可禁止商业用途。</p><p style="font-size:12px;color:#8e8e93;margin-top:8px">完整协议请查看项目仓库中的 LICENSE 文件。</p><button class="disclaimer-accept" onclick="this.closest(\x27.disclaimer-overlay\x27).remove()">'+CV.t('关闭')+'</button></div>';
 	  ov.addEventListener('click',function(){ov.remove()});document.body.appendChild(ov);
 	};
+	// ===== LANGUAGE TOGGLE =====
+	window.JPSP.toggleLang = function() {
+	  var cur = CV.getLang();
+	  CV.setLang(cur === 'cn' ? 'tw' : 'cn');
+	  CV.initConv();
+	  var top = navStack[navStack.length - 1];
+	  if (top && top.type === 'tab') renderTab(top.tab);
+	  else if (top && top.type === 'scene') renderScenePage(top.sceneId, top.subsceneId);
+	  else if (top && top.type === 'detail') renderDetail(top.id);
+	  else renderTab('home');
+	};
+
 	// ===== TAB BAR =====
 document.getElementById('tabbar').onclick=function(e){var t=e.target.closest('.tab');if(!t)return;navStack=[{type:'tab',tab:t.dataset.tab}];renderTab(t.dataset.tab);};
 

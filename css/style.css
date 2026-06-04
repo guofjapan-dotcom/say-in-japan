@@ -269,8 +269,9 @@ body{background:#f2f2f7;color:#000;height:100%;overflow:hidden;-webkit-font-smoo
    LANG TOGGLE
    ================================================================ */
 .lang-toggle{text-align:right;margin-bottom:4px}
-.lt-btn{background:none;border:none;font-size:12px;cursor:pointer;color:#8e8e93;padding:4px 2px;font-weight:500}
-.lt-btn .lt-active{color:#3366EE;font-weight:700}
+.lt-btn{background:#fff;border:1px solid #e5e5ea;border-radius:14px;font-size:12px;cursor:pointer;color:#3366EE;padding:6px 12px;font-weight:600;transition:background .1s}
+.lt-btn:active{background:#f2f2f7}
+.lt-btn .lt-active{background:#3366EE;color:#fff;padding:2px 8px;border-radius:10px;font-weight:700}
 
 /* ================================================================
    APP FOOTER (copyright)
