@@ -111,7 +111,7 @@ body{
 #app-header h1{
   font-size:17px;font-weight:700;
   text-align:center;letter-spacing:-.01em;
-  background:none;color:var(--t-primary);
+  background:none;color:var(--c-primary);
   padding:0;border-radius:0;
   cursor:pointer;
   transition:opacity var(--t-normal);
