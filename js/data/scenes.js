@@ -56,7 +56,7 @@ var JPSP_SCENES = {
     },
     {
       "id": "emergency",
-      "title_cn": "紧急情况",
+      "title_cn": "🆘 紧急情况",
       "title_jp": "緊急",
       "icon": "alert",
       "color": "#FF3B30",
