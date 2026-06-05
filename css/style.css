@@ -100,21 +100,23 @@ body{
 #app-shell{display:flex;flex-direction:column;height:100dvh}
 #app-header{
   flex-shrink:0;
-  background:var(--c-surface);
-  padding:var(--safe-top) var(--s-4) 11px;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:.5px solid var(--c-divider);
+  padding:var(--safe-top) var(--s-4) 10px;
   z-index:10;
   display:flex;
   justify-content:center;
 }
 #app-header h1{
-  font-size:15px;font-weight:700;
-  text-align:center;letter-spacing:.02em;
-  background:var(--c-primary);color:var(--t-inverse);
-  padding:6px 18px;border-radius:var(--r-lg);
+  font-size:17px;font-weight:700;
+  text-align:center;letter-spacing:-.01em;
+  background:none;color:var(--t-primary);
+  padding:0;border-radius:0;
   cursor:pointer;
-  transition:transform var(--t-normal),opacity var(--t-normal);
+  transition:opacity var(--t-normal);
 }
-#app-header h1:active{transform:scale(.94);opacity:.85}
+#app-header h1:active{opacity:.5}
 #app-content{
   flex:1;overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
